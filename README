@@ -1,0 +1,1 @@
+#Only take into account the "insights" when the guilt score when the result is printed is over 0.5, be careful as the label places do switch
