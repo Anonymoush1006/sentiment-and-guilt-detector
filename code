@@ -1,0 +1,71 @@
+import transformers
+from transformers import pipeline
+
+
+emotion_classifier = pipeline("text-classification", model="Shahzad1/go_emotions_model_bert1", top_k=None)
+print("enter the text: ")
+transcript=input("You: ")
+result = emotion_classifier(transcript)
+for emotion in result[0]:
+    label = emotion["label"]
+    score = round(emotion["score"] * 100, 2)
+    print(f"{label}: {score}%")
+emotion_scores = {e["label"].lower(): round(e["score"] * 100, 2) for e in result[0]}
+admiration = emotion_scores.get("admiration", 0)
+amusement = emotion_scores.get("amusement", 0)
+anger = emotion_scores.get("anger", 0)
+annoyance = emotion_scores.get("annoyance", 0)
+approval = emotion_scores.get("approval", 0)
+caring = emotion_scores.get("caring", 0)
+confusion = emotion_scores.get("confusion", 0)
+curiosity = emotion_scores.get("curiosity", 0)
+desire = emotion_scores.get("desire", 0)
+disappointment = emotion_scores.get("disappointment", 0)
+disapproval = emotion_scores.get("disapproval", 0)
+disgust = emotion_scores.get("disgust", 0)
+embarrassment = emotion_scores.get("embarrassment", 0)
+excitement = emotion_scores.get("excitement", 0)
+fear = emotion_scores.get("fear", 0)
+gratitude = emotion_scores.get("gratitude", 0)
+grief = emotion_scores.get("grief", 0)
+joy = emotion_scores.get("joy", 0)
+love = emotion_scores.get("love", 0)
+nervousness = emotion_scores.get("nervousness", 0)
+optimism = emotion_scores.get("optimism", 0)
+pride = emotion_scores.get("pride", 0)
+realization = emotion_scores.get("realization", 0)
+relief = emotion_scores.get("relief", 0)
+remorse = emotion_scores.get("remorse", 0)
+sadness = emotion_scores.get("sadness", 0)
+surprise = emotion_scores.get("surprise", 0)
+neutral = emotion_scores.get("neutral", 0)
+
+if remorse < 10 and fear < 10 and sadness < 10 and caring < 10:
+        print("Dissociation")
+if remorse > 30 and sadness < 10 and fear < 5:
+        print("ingenuine respose")
+if remorse > 30 and joy > 10:
+        print("Possible insanity")
+if remorse > 30 and sadness > 10 and (fear > 10 or caring > 10):
+        print("Genuine remorse")
+if remorse > 20 and approval > 5 and caring < 5 and fear < 5:
+        print("Strategic confession")
+        print("Possible Sarcastic remorse, unsure of this though")
+if fear > 20 and (remorse < 10 or sadness<10):
+        print ("Fear without guilt")
+if (desire>5):
+        print("possible SA offender, deranged")
+if neutral>50:
+        print ("Neutral response")
+if approval>30:
+       print("Controlling tendencies")
+if anger>40 and sadness<10:
+       print("Possible aggresion")
+if optimism>30 or joy>30:
+       print("if theyre guilty its fully insane wtf")
+
+guilt_det = pipeline(model="MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli")
+result = guilt_det(transcript,
+      candidate_labels=["Guilty of crime", "Not Guilty of crime"],
+)
+print(result)
